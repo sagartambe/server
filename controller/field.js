@@ -14,10 +14,17 @@ module.exports = {
     const input = {
       where: {},
       limit: parseInt(req.query.limit) || 10,
-      offset: page
+      offset: page,
+      include: [{
+        model: db.Region,
+        attributes: ['name', 'id']
+      }]
     };
     if (req.query.name) {
       input.where.name = {[Op.like]: `%${req.query.name}%`}
+    }
+    if (req.query.id) {
+      input.where.id = req.query.id;
     }
     Field.findAndCountAll(input)
       .then(data => {
@@ -47,7 +54,7 @@ module.exports = {
       })
       .catch(err => {
         res.status(500).send({
-          message: err.errors[0].message || 'Fail to create field'
+          error_message: err.errors[0].message || 'Fail to create field'
         });
       });
   },
@@ -74,13 +81,13 @@ module.exports = {
         }
         else {
           res.status(500).send({
-            message: 'Fail to update field'
+            error_message: 'Fail to update field'
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: err.errors[0].message || 'Fail to update field'
+          error_message: err.errors[0].message || 'Fail to update field'
         });
       });
   },
@@ -100,13 +107,13 @@ module.exports = {
         }
         else {
           res.status(500).send({
-            message: 'Fail to delete field'
+            error_message: 'Fail to delete field'
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: err.errors[0].message || 'Fail to delete field'
+          error_message: err.errors[0].message || 'Fail to delete field'
         });
       });
   }

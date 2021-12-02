@@ -20,13 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'CropCycleField',
   });
   CropCycleField.associate = models => {
-    CropCycleField.belongsTo(models.CropCycle, {
-      foreignKey: 'cropCycleId'
-    });
-  }
-  CropCycleField.associate = models => {
     CropCycleField.belongsTo(models.Field, {
       foreignKey: 'fieldId'
+    });
+    CropCycleField.belongsTo(models.CropCycle, {
+      foreignKey: 'cropCycleId'
     });
   }
   return CropCycleField;

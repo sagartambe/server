@@ -23,8 +23,6 @@ module.exports = (sequelize, DataTypes) => {
     Region.belongsTo(models.Property, {
       foreignKey: 'propertyId'
     });
-  }
-  Region.associate = models => {
     Region.hasMany(models.Field, {
       foreignKey: 'regionId'
     });

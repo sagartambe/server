@@ -15,10 +15,20 @@ module.exports = {
       where: {
       },
       limit: parseInt(req.query.limit) || 10,
-      offset: page
+      offset: page,
+      include: [{
+        model: db.CropCycle,
+        attributes: ['name']
+      }, {
+        model: db.Field,
+        attributes: ['name']
+      }]
     };
     if (req.query.name) {
       input.where.name = {[Op.like]: `%${req.query.name}%`}
+    }
+    if (req.query.id) {
+      input.where.id = req.query.id;
     }
     CropCycleField.findAndCountAll(input)
       .then(data => {
@@ -48,9 +58,9 @@ module.exports = {
       .then(data => {
         if (data.length) {
           res.status(500).send({
-            message: `Crop cycle field with cropCycleId ${req.body.cropcycle_id} and fieldId ${req.body.field_id} already exists.`
+            error_message: `Crop cycle field with crop cycle and field already exists.`
           });
-          throw new Error(`Crop cycle field with cropCycleId ${req.body.cropcycle_id} and fieldId ${req.body.field_id} already exists.`);
+          throw new Error(`Crop cycle field with crop cycle and field already exists.`);
         }
         else {
           return;
@@ -68,7 +78,7 @@ module.exports = {
           })
           .catch(err => {
             res.status(500).send({
-              message: err.errors[0].message || 'Fail to create crop cycle field'
+              error_message: err.errors[0].message || 'Fail to create crop cycle field'
             });
           });
       })
@@ -94,9 +104,9 @@ module.exports = {
       .then(data => {
         if (data.length) {
           res.status(500).send({
-            message: `Crop cycle field with cropCycleId ${req.body.cropcycle_id} and fieldId ${req.body.field_id} already exists.`
+            error_message: `Crop cycle field with crop cycle and field already exists.`
           });
-          throw new Error(`Crop cycle field with cropCycleId ${req.body.cropcycle_id} and fieldId ${req.body.field_id} already exists.`);
+          throw new Error(`Crop cycle field with cropCycle and field already exists.`);
         }
         else {
           return;
@@ -120,13 +130,13 @@ module.exports = {
             }
             else {
               res.status(500).send({
-                message: 'Fail to update crop cycle field'
+                error_message: 'Fail to update crop cycle field'
               });
             }
           })
           .catch(err => {
             res.status(500).send({
-              message: err.errors[0].message || 'Fail to update crop cycle field'
+              error_message: err.errors[0].message || 'Fail to update crop cycle field'
             });
           });
       })
@@ -150,13 +160,13 @@ module.exports = {
         }
         else {
           res.status(500).send({
-            message: 'Fail to delete crop cycle field'
+            error_message: 'Fail to delete crop cycle field'
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: err.errors[0].message || 'Fail to delete crop cycle field'
+          error_message: err.errors[0].message || 'Fail to delete crop cycle field'
         });
       });
   }

@@ -23,8 +23,6 @@ module.exports = (sequelize, DataTypes) => {
     CropCycle.belongsTo(models.Crop, {
       foreignKey: 'cropId'
     });
-  }
-  CropCycle.associate = models => {
     CropCycle.hasMany(models.CropCycleField, {
       foreignKey: 'cropCycleId'
     });

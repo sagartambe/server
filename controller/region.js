@@ -14,10 +14,17 @@ module.exports = {
     const input = {
       where: {},
       limit: parseInt(req.query.limit) || 10,
-      offset: page
+      offset: page,
+      include: [{
+        model: db.Property,
+        attributes: ['name', 'id']
+      }]
     };
     if (req.query.name) {
       input.where.name = {[Op.like]: `%${req.query.name}%`}
+    }
+    if (req.query.id) {
+      input.where.id = req.query.id;
     }
     Region.findAndCountAll(input)
       .then(data => {
@@ -46,7 +53,7 @@ module.exports = {
       })
       .catch(err => {
         res.status(500).send({
-          message: err.errors[0].message || 'Fail to create region'
+          error_message: err.errors[0].message || 'Fail to create region'
         });
       });
   },
@@ -72,13 +79,13 @@ module.exports = {
         }
         else {
           res.status(500).send({
-            message: 'Fail to update region'
+            error_message: 'Fail to update region'
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: err.errors[0].message || 'Fail to update region'
+          error_message: err.errors[0].message || 'Fail to update region'
         });
       });
   },
@@ -98,13 +105,13 @@ module.exports = {
         }
         else {
           res.status(500).send({
-            message: 'Fail to delete region'
+            error_message: 'Fail to delete region'
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: err.errors[0].message || 'Fail to delete region'
+          error_message: err.errors[0].message || 'Fail to delete region'
         });
       });
   }

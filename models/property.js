@@ -20,11 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Property',
   });
   Property.associate = models => {
+  }
+  Property.associate = models => {
     Property.belongsTo(models.Organization, {
       foreignKey: 'organizationId'
     });
-  }
-  Property.associate = models => {
     Property.hasMany(models.Region, {
       foreignKey: 'propertyId'
     });

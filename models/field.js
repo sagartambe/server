@@ -24,8 +24,6 @@ module.exports = (sequelize, DataTypes) => {
     Field.belongsTo(models.Region, {
       foreignKey: 'regionId'
     });
-  }
-  Field.associate = models => {
     Field.hasMany(models.CropCycleField, {
       foreignKey: 'fieldId'
     });

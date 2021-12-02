@@ -6,23 +6,25 @@ module.exports = {
   list: (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(412).json({ errors: errors.array() });
+      res.status(412).json({ error_message: errors.array() });
       return;
     }
     const page = (req.query.page - 1) || 0;
     const input = {
       where: {},
-      limit: 10,
-      offset: page,
-      include: [db.Property]
+      limit: parseInt(req.query.limit || 10),
+      offset: page
     };
+    if (req.query.id) {
+      input.where.id = req.query.id;
+    }
     Organization.findAndCountAll(input)
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
-          message:
+          error_message:
             err.message
         });
       });
@@ -30,7 +32,7 @@ module.exports = {
   create: (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(412).json({ errors: errors.array() });
+      res.status(412).json({ error_message: errors.array() });
       return;
     }
     const input = {
@@ -42,14 +44,14 @@ module.exports = {
       })
       .catch(err => {
         res.status(500).send({
-          message: err.errors[0].message || 'Fail to create organization'
+          error_message: err.errors[0].message || 'Fail to create organization'
         });
       });
   },
   update: (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(412).json({ errors: errors.array() });
+      res.status(412).json({ error_message: errors.array() });
       return;
     }
     const input = {
@@ -67,20 +69,20 @@ module.exports = {
         }
         else {
           res.status(500).send({
-            message: 'Fail to update organization'
+            error_message: 'Fail to update organization'
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: err.errors[0].message || 'Fail to update organization'
+          error_message: err.errors[0].message || 'Fail to update organization'
         });
       });
   },
   delete: (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(412).json({ errors: errors.array() });
+      res.status(412).json({ error_message: errors.array() });
       return;
     }
     const condition = {
@@ -93,13 +95,13 @@ module.exports = {
         }
         else {
           res.status(500).send({
-            message: 'Fail to delete organization'
+            error_message: 'Fail to delete organization'
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: err.errors[0].message || 'Fail to delete organization'
+          error_message: err.errors[0].message || 'Fail to delete organization'
         });
       });
   }

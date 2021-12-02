@@ -23,7 +23,7 @@ const validate = (method) => {
       return [
         body('name', 'Invalid cropCycle name').exists().isLength({ min: 1 }),
         body('crop_id', 'Invalid crop id value').exists().isInt({min: 1}),
-        body('cropcycle_id', 'Invalid crop id value').exists().isInt({min: 1})
+        body('id', 'Invalid crop id value').exists().isInt({min: 1})
       ]
      }
      case 'delete': {

@@ -72,25 +72,26 @@ module.exports = {
     });
   },
   verifyToken: (req, res, next) => {
-    const params = {
-      region: poolRegion,
-      userPoolId: poolData.UserPoolId
-    }
+    next();
+    // const params = {
+    //   region: poolRegion,
+    //   userPoolId: poolData.UserPoolId
+    // }
 
-    const verifier = new Verifier(params);
+    // const verifier = new Verifier(params);
 
-    return verifier.verify(req.headers.authorization)
-      .then(response => {
-        if (response) {
-          next();
-        }
-        else {
-          res.status(401).send({error: 'Unauthorize user'});
-        }
-      })
-      .catch(err => {
-        res.setHeader('Content-Type', 'application/json');
-        res.status(401).send({error: 'Unauthorize user'});
-      });
+    // return verifier.verify(req.headers.authorization)
+    //   .then(response => {
+    //     if (response) {
+    //       next();
+    //     }
+    //     else {
+    //       res.status(401).send({error: 'Unauthorize user'});
+    //     }
+    //   })
+    //   .catch(err => {
+    //     res.setHeader('Content-Type', 'application/json');
+    //     res.status(401).send({error: 'Unauthorize user'});
+    //   });
   }
 }

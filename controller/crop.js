@@ -12,9 +12,12 @@ module.exports = {
     const page = (req.query.page - 1) || 0;
     const input = {
       where: {},
-      limit: 10,
+      limit: parseInt(req.query.limit) || 10,
       offset: page
     };
+    if (req.query.id) {
+      input.where.id = req.query.id;
+    }
     Crop.findAndCountAll(input)
       .then(data => {
         res.send(data);
@@ -41,7 +44,7 @@ module.exports = {
       })
       .catch(err => {
         res.status(500).send({
-          message: err.errors[0].message || 'Fail to create crop'
+          error_message: err.errors[0].message || 'Fail to create crop'
         });
       });
   },
@@ -66,13 +69,13 @@ module.exports = {
         }
         else {
           res.status(500).send({
-            message: 'Fail to update crop'
+            error_message: 'Fail to update crop'
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: err.errors[0].message || 'Fail to update crop'
+          error_message: err.errors[0].message || 'Fail to update crop'
         });
       });
   },
@@ -92,13 +95,13 @@ module.exports = {
         }
         else {
           res.status(500).send({
-            message: 'Fail to delete crop'
+            error_message: 'Fail to delete crop'
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: err.errors[0].message || 'Fail to delete crop'
+          error_message: err.errors[0].message || 'Fail to delete crop'
         });
       });
   }
