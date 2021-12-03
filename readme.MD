@@ -6,6 +6,6 @@
 
 ## Installation, start & test application server
   * `npm install`
-  * Update MySQL configurations in ./config/config.json
+  * `./config/config.json` Update MySQL connecion configurations
   * `npm start` to run server
   * `npm test` to run test cases of API
