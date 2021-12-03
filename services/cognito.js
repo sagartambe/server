@@ -5,10 +5,10 @@ const jwt = require('jsonwebtoken');
 const Verifier = require('verify-cognito-token');
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 const poolData = {
-  UserPoolId: 'us-west-2_8fSuTMF37',
-  ClientId: '5aekom5n3uo8odhlvn3ckbh34v'
+  UserPoolId: 'us-east-1_oxXinXbs4',
+  ClientId: '5f8htobi0sf0aaggpf54223i0i'
 };
-const poolRegion = 'us-west-2';
+const poolRegion = 'us-east-1';
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
 module.exports = {
@@ -72,26 +72,28 @@ module.exports = {
     });
   },
   verifyToken: (req, res, next) => {
-    next();
-    // const params = {
-    //   region: poolRegion,
-    //   userPoolId: poolData.UserPoolId
-    // }
+    const token = req.headers.authorization
+    const params = {
+      region: poolRegion,
+      userPoolId: poolData.UserPoolId
+    }
 
-    // const verifier = new Verifier(params);
+    const verifier = new Verifier(params);
 
-    // return verifier.verify(req.headers.authorization)
-    //   .then(response => {
-    //     if (response) {
-    //       next();
-    //     }
-    //     else {
-    //       res.status(401).send({error: 'Unauthorize user'});
-    //     }
-    //   })
-    //   .catch(err => {
-    //     res.setHeader('Content-Type', 'application/json');
-    //     res.status(401).send({error: 'Unauthorize user'});
-    //   });
+    return verifier.verify(token)
+      .then(response => {
+        console.log(response);
+        if (response) {
+          next();
+        }
+        else {
+          res.status(401).send({error: 'Unauthorize user'});
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(401).send({error: 'Unauthorize user'});
+      });
   }
 }
